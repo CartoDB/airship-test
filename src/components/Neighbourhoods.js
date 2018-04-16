@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import carto from 'carto.js';
 import { CategoryWidget } from '@carto/airship'
@@ -8,8 +9,8 @@ import Widget from './Widget';
 class Neighbourhoods extends Component {
   static propTypes = {
     context: PropTypes.shape({
-      cartoClient: PropTypes.object,
-      cartoLayers: PropTypes.object,
+      client: PropTypes.object,
+      layers: PropTypes.object,
       map: PropTypes.object,
     }),
   }
@@ -22,13 +23,13 @@ class Neighbourhoods extends Component {
   constructor(props) {
     super(props);
 
-    const { cartoClient, cartoLayers, map } = props.context;
-    const { source } = cartoLayers.listings;
+    const { client, layers, map } = props;
+    const { source } = layers.listings;
 
     const sql = source.getQuery();
     const bboxFilter = new carto.filter.BoundingBoxLeaflet(map);
 
-    this.something = this.props.context.cartoLayers.neighbourhoods.source.getQuery()
+    this.baseQuery = this.props.layers.neighbourhoods.source.getQuery()
 
     this.dataView = new carto.dataview.Category(new carto.source.SQL(sql), 'neighbourhood', {
       limit: 10,
@@ -38,7 +39,7 @@ class Neighbourhoods extends Component {
     this.dataView.addFilter(bboxFilter);
     this.dataView.on('dataChanged', this.onDataChanged);
 
-    cartoClient.addDataview(this.dataView);
+    client.addDataview(this.dataView);
   }
 
   componentWillUnmount() {
@@ -50,18 +51,18 @@ class Neighbourhoods extends Component {
   }
 
   onCategoryClicked = (selected) => {
-    const { source } = this.props.context.cartoLayers.listings;
-    const neighSource = this.props.context.cartoLayers.neighbourhoods.source;
+    const { source } = this.props.layers.listings;
+    const neighSource = this.props.layers.neighbourhoods.source;
     const filter = selected.map(category => `'${category}'`).join(',');
     const originalQuery = this.dataView.getSource()._query;
 
     this.setState({ selected }, () => {
       if (selected.length === 0) {
         source.setQuery(originalQuery)
-        neighSource.setQuery(this.something)
+        neighSource.setQuery(this.baseQuery)
       } else {
         source.setQuery(`${originalQuery} AND neighbourhood IN (${filter})`);
-        neighSource.setQuery(`${this.something} WHERE neighbourhood IN (${filter})`);
+        neighSource.setQuery(`${this.baseQuery} WHERE neighbourhood IN (${filter})`);
       }
     })
   }
@@ -86,4 +87,10 @@ class Neighbourhoods extends Component {
   }
 }
 
-export default Neighbourhoods;
+const mapStateToProps = state => ({
+  client: state.client,
+  map: state.map,
+  layers: state.layers,
+});
+
+export default connect(mapStateToProps)(Neighbourhoods);

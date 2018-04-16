@@ -1,21 +1,26 @@
 import React from 'react';
 import { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import carto from 'carto.js';
 import { Display, Range, Text } from '@carto/airship'
 import Widget from './Widget';
 import { C } from '../constants';
+import { setPriceFilter } from '../actions';
 import { formatPrice, debounce } from '../utils';
 
-const QUERY = 'SELECT min(price), max(price) FROM airbnb_listings_filtered WHERE price < 800';
+const QUERY = `
+  SELECT
+    min(price),
+    max(price)
+  FROM airbnb_listings_filtered
+`;
 
 class AveragePrice extends Component {
   static propTypes = {
-    context: PropTypes.shape({
-      cartoClient: PropTypes.object,
-      map: PropTypes.object,
-      cartoLayers: PropTypes.object,
-    }),
+    client: PropTypes.object,
+    layers: PropTypes.object,
+    map: PropTypes.object,
   }
 
   state = {
@@ -25,8 +30,8 @@ class AveragePrice extends Component {
   constructor(props) {
     super(props);
 
-    const { cartoClient, map, cartoLayers } = props.context;
-    const { source } = cartoLayers.listings;
+    const { client, map, layers } = props;
+    const { source } = layers.listings;
 
     const bboxFilter = new carto.filter.BoundingBoxLeaflet(map);
 
@@ -35,15 +40,16 @@ class AveragePrice extends Component {
     this.dataView.addFilter(bboxFilter);
     this.dataView.on('dataChanged', this.onDataChanged);
 
-    cartoClient.addDataview(this.dataView);
+    client.addDataview(this.dataView);
   }
 
   componentWillMount() {
-    fetch(`${C.SQL_API_URL}${QUERY}`)
+    fetch(`${C.SQL_API_URL}${QUERY.trim()}`)
       .then(res => res.json())
       .then(data => {
         const { min, max } = data.rows[0];
-        this.setState({ min, max })
+        this.setState({ range: { min, max } })
+        this.props.setPriceFilter({ min, max });
       })
       .catch(error => console.log(error));
   }
@@ -57,18 +63,20 @@ class AveragePrice extends Component {
   }
 
   onRangeChanged = ({ min, max }) => {
-    const { source } = this.props.context.cartoLayers.listings;
+    const { source } = this.props.layers.listings;
     const newQuery = `${this.originalQuery} AND price BETWEEN ${min} AND ${max}`;
 
     source.setQuery(newQuery);
+    this.props.setPriceFilter({ min, max })
   }
 
   render() {
-    const { min, max } = this.state;
+    const { range } = this.state;
+    const { min, max } = this.props.priceFilter;
 
     return (
       <Widget>
-        <Widget.Title>Average Price</Widget.Title>
+        <Widget.Title>Average Price in Madrid</Widget.Title>
         <Widget.Description>Average renting price per night</Widget.Description>
 
         <Display>{formatPrice(this.state.result)}</Display>
@@ -79,8 +87,8 @@ class AveragePrice extends Component {
             <Range
               draggable
               value={{ min, max }}
-              minValue={min}
-              maxValue={max}
+              minValue={range.min}
+              maxValue={range.max}
               onChange={debounce(this.onRangeChanged)}
               formatLabel={(value) => `${value} €`}
             />
@@ -92,4 +100,15 @@ class AveragePrice extends Component {
   }
 }
 
-export default AveragePrice;
+const mapStateToProps = state => ({
+  client: state.client,
+  map: state.map,
+  layers: state.layers,
+  priceFilter: state.filters.price,
+});
+
+const mapDispatchToProps = dispatch => ({
+  setPriceFilter: filter => dispatch(setPriceFilter(filter)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AveragePrice);

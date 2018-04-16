@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import carto from 'carto.js';
 import { Histogram } from '@carto/airship';
@@ -7,11 +8,9 @@ import Widget from './Widget';
 
 class ReviewScores extends Component {
   static propTypes = {
-    context: PropTypes.shape({
-      cartoClient: PropTypes.object,
-      cartoLayers: PropTypes.object,
-      map: PropTypes.object,
-    }),
+    client: PropTypes.object,
+    layers: PropTypes.object,
+    map: PropTypes.object,
   }
 
   state = {
@@ -21,8 +20,8 @@ class ReviewScores extends Component {
   constructor(props) {
     super(props);
 
-    const { cartoClient, cartoLayers, map } = props.context;
-    const { source } = cartoLayers.listings;
+    const { client, layers, map } = props;
+    const { source } = layers.listings;
 
     const bboxFilter = new carto.filter.BoundingBoxLeaflet(map);
 
@@ -33,7 +32,7 @@ class ReviewScores extends Component {
     this.dataView.addFilter(bboxFilter);
     this.dataView.on('dataChanged', this.onDataChanged);
 
-    cartoClient.addDataview(this.dataView);
+    client.addDataview(this.dataView);
   }
 
   componentWillUnmount() {
@@ -60,4 +59,10 @@ class ReviewScores extends Component {
   }
 }
 
-export default ReviewScores;
+const mapStateToProps = state => ({
+  client: state.client,
+  map: state.map,
+  layers: state.layers,
+});
+
+export default connect(mapStateToProps)(ReviewScores);

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import carto from 'carto.js';
 import { DonutChart, Text } from '@carto/airship'
@@ -9,11 +10,9 @@ const DONUT_COLORS = ['#3AB5F0', '#7E78E2', '#F45171'];
 
 class RoomType extends Component {
   static propTypes = {
-    context: PropTypes.shape({
-      cartoClient: PropTypes.object,
-      cartoLayers: PropTypes.object,
-      map: PropTypes.object,
-    }),
+    client: PropTypes.object,
+    layers: PropTypes.object,
+    map: PropTypes.object,
   }
 
   state = {
@@ -23,8 +22,8 @@ class RoomType extends Component {
   constructor(props) {
     super(props);
 
-    const { cartoClient, cartoLayers, map } = props.context;
-    const { source } = cartoLayers.listings;
+    const { client, layers, map } = props;
+    const { source } = layers.listings;
 
     const bboxFilter = new carto.filter.BoundingBoxLeaflet(map);
 
@@ -36,7 +35,7 @@ class RoomType extends Component {
     this.dataView.addFilter(bboxFilter);
     this.dataView.on('dataChanged', this.onDataChanged);
 
-    cartoClient.addDataview(this.dataView);
+    client.addDataview(this.dataView);
   }
 
   componentWillUnmount() {
@@ -55,6 +54,7 @@ class RoomType extends Component {
         <Widget.Title>Room Type</Widget.Title>
         <Widget.Description>Airbnb hosts can list entire homes/apartments, private or shared rooms.</Widget.Description>
         <Text margin="0 0 2rem" color="#747474">Depending on the room type, availability, and activity, an airbnb listing could be more like a hotel, disruptive for neighbours, taking away housing, and illegal.</Text>
+
         {categories.length > 0 && (
           <DonutChart data={categories} colors={DONUT_COLORS} />
         )}
@@ -63,4 +63,10 @@ class RoomType extends Component {
   }
 }
 
-export default RoomType;
+const mapStateToProps = state => ({
+  client: state.client,
+  map: state.map,
+  layers: state.layers,
+});
+
+export default connect(mapStateToProps)(RoomType);
