@@ -40,23 +40,45 @@ export const layers = (state = {}, action) => {
   }
 }
 
-const filtersInital = {
-  price: { min: 0, max: 0 },
-  bbox: [0, 0, 0, 0],
+const FILTERS_INITIAL_STATE = {
+  price: false,
+  bbox: false,
+  neighbourhoods: false,
 }
-export const filters = (state = filtersInital, action) => {
+export const filters = (state = FILTERS_INITIAL_STATE, action) => {
   switch (action.type) {
-    case actions.SET_PRICE:
+    case actions.SET_PRICE: {
+      const { min, max } = action.filter;
+
       return {
         ...state,
-        price: action.filter,
+        price: `price BETWEEN ${min} AND ${max}`,
+      };
+    }
+
+    case actions.SET_BBOX: {
+      console.log(action.neighbourhoods)
+      const [ xmin, ymin, xmax, ymax ] = action.bbox;
+
+      return {
+        ...state,
+        bbox: `ST_Intersects(the_geom_webmercator, ST_Transform(ST_MakeEnvelope(${xmin}, ${ymin}, ${xmax}, ${ymax}, 4326), 3857))`,
+      };
+    }
+
+    case actions.SET_NEIGHBOURHOODS: {
+      const neighbourhoods = action.neighbourhoods.map(name => `'${name}'`).join(',');
+
+      if (neighbourhoods.length === 0) return {
+        ...state,
+        neighbourhoods: false,
       };
 
-    case actions.SET_BBOX:
       return {
         ...state,
-        bbox: action.bbox,
+        neighbourhoods: `neighbourhood IN (${neighbourhoods})`,
       };
+    }
 
     default:
       return state;

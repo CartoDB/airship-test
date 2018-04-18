@@ -25,6 +25,7 @@ class AveragePrice extends Component {
 
   state = {
     result: 0,
+    range: {}
   }
 
   constructor(props) {
@@ -35,7 +36,6 @@ class AveragePrice extends Component {
 
     const bboxFilter = new carto.filter.BoundingBoxLeaflet(map);
 
-    this.originalQuery = source.getQuery();
     this.dataView = new carto.dataview.Formula(source, 'price', { operation: carto.operation.AVG });
     this.dataView.addFilter(bboxFilter);
     this.dataView.on('dataChanged', this.onDataChanged);
@@ -48,8 +48,7 @@ class AveragePrice extends Component {
       .then(res => res.json())
       .then(data => {
         const { min, max } = data.rows[0];
-        this.setState({ range: { min, max } })
-        this.props.setPriceFilter({ min, max });
+        this.setState({ min, max, range: { min, max } })
       })
       .catch(error => console.log(error));
   }
@@ -63,27 +62,23 @@ class AveragePrice extends Component {
   }
 
   onRangeChanged = ({ min, max }) => {
-    const { source } = this.props.layers.listings;
-    const newQuery = `${this.originalQuery} AND price BETWEEN ${min} AND ${max}`;
-
-    source.setQuery(newQuery);
+    this.setState({ min, max });
     this.props.setPriceFilter({ min, max })
   }
 
   render() {
-    const { range } = this.state;
-    const { min, max } = this.props.priceFilter;
+    const { min, max, range, result } = this.state;
 
     return (
       <Widget>
         <Widget.Title>Average Price in Madrid</Widget.Title>
         <Widget.Description>Average renting price per night</Widget.Description>
 
-        <Display>{formatPrice(this.state.result)}</Display>
+        <Display>{formatPrice(result)}</Display>
 
-        {(min || max) && (
+        {(range.min || range.max) && (
           <React.Fragment>
-            <Text margin="0 0 0.5rem">Filer by price:</Text>
+            <Text margin="0 0 0.5rem">Filter by price:</Text>
             <Range
               draggable
               value={{ min, max }}

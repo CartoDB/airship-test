@@ -47,11 +47,11 @@ class App extends Component {
 
   setupLayers() {
     const cartoLayers = Object.keys(layers).reduce((all, layerName) => {
-      const { source, style, options, ...other} = layers[layerName];
+      const { options, ...other} = layers[layerName];
 
-      const cartoSource = new carto.source.SQL(source);
-      const cartoStyle = new carto.style.CartoCSS(style);
-      const layer = new carto.layer.Layer(cartoSource, cartoStyle, options);
+      const source = new carto.source.SQL(other.query);
+      const style = new carto.style.CartoCSS(other.cartocss);
+      const layer = new carto.layer.Layer(source, style, options);
 
       if(options.featureClickColumns) {
         layer.on('featureClicked', this.openPopup.bind(this));
@@ -60,7 +60,7 @@ class App extends Component {
       this.props.client.addLayer(layer);
       this.props.client.getLeafletLayer().addTo(this.props.map);
 
-      return { ...all, [layerName]: { source: cartoSource, style: cartoStyle, layer, ...other } };
+      return { ...all, [layerName]: { source, style, layer, ...other } };
     }, {});
 
     // Labels need to be added after the layers

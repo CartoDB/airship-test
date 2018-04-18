@@ -18,8 +18,9 @@ class TypesPerNeighbourhood extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.priceFilter !== this.props.priceFilter || prevProps.bboxFilter !== this.props.bboxFilter) {
+    if(prevProps.filters !== this.props.filters) {
       this.fetchData();
+      this.updateLayer();
     }
   }
 
@@ -27,20 +28,37 @@ class TypesPerNeighbourhood extends Component {
     this.fetchData();
   }
 
-  getQuery() {
-    const { min, max } = this.props.priceFilter;
-    const [xmin, ymin, xmax, ymax] = this.props.bboxFilter;
+  updateLayer() {
+    const { bbox, ...others } = this.props.filters;
+    const { source, query } = this.props.layers.listings;
 
+    const filters = Object.values(others).filter(filter => !!filter);
+
+    const newQuery = filters.length === 0
+      ? query
+      : `${query} AND ${filters.join(' AND ')}`;
+
+    source.setQuery(newQuery);
+  }
+
+  getFilters() {
+    const filters = Object.values(this.props.filters).filter(filter => !!filter);
+
+    if (!filters.length) return '';
+
+    return `AND ${filters.join(' AND ')}`;
+  }
+
+  getQuery() {
     const query = `
       SELECT
         neighbourhood as name,
-        count(neighbourhood) as count,
         count(room_type) FILTER (WHERE room_type='Entire home/apt') as entire_homes,
         count(room_type) FILTER (WHERE room_type='Shared room') as shared_rooms,
         count(room_type) FILTER (WHERE room_type='Private room') as private_rooms
       FROM airbnb_listings_filtered
-      WHERE price BETWEEN ${min} AND ${max}
-      AND ST_Intersects(the_geom, ST_MakeEnvelope(${xmin}, ${ymin}, ${xmax}, ${ymax}, 4326))
+      WHERE availability_365 > 0
+      ${this.getFilters()}
       GROUP BY neighbourhood
     `;
 
@@ -60,7 +78,6 @@ class TypesPerNeighbourhood extends Component {
     return (
       <Widget>
         <Widget.Title>Room types per neighbourhood</Widget.Title>
-        <Widget.Description>Description.</Widget.Description>
         {data.length > 0 && (
           <StackedBar
             data={data}
@@ -75,8 +92,7 @@ class TypesPerNeighbourhood extends Component {
 
 const mapStateToProps = state => ({
   layers: state.layers,
-  priceFilter: state.filters.price,
-  bboxFilter: state.filters.bbox,
+  filters: state.filters,
 });
 
 export default connect(mapStateToProps)(TypesPerNeighbourhood);

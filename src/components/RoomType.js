@@ -30,7 +30,6 @@ class RoomType extends Component {
     this.dataView = new carto.dataview.Category(source, 'room_type', {
       limit: 10,
       operation: carto.operation.COUNT,
-      operationColumn: 'cartodb_id'
     });
     this.dataView.addFilter(bboxFilter);
     this.dataView.on('dataChanged', this.onDataChanged);

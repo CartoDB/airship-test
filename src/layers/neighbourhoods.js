@@ -1,15 +1,16 @@
 export default {
-  name: '🚋  Neighbourhoods',
+  name: 'Neighbourhoods',
 
   visible: true,
 
-  style: `
+  cartocss: `
     #layer {
       line-color: #000;
+      line-opacity: 0.2;
     }
   `,
 
-  source: `
+  query: `
     SELECT * FROM neighbourhoods
   `,
 

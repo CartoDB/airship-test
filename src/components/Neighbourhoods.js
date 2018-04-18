@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import carto from 'carto.js';
 import { CategoryWidget } from '@carto/airship'
 import Widget from './Widget';
+import { setNeighbourhoods } from '../actions';
 
 class Neighbourhoods extends Component {
   static propTypes = {
@@ -29,8 +30,6 @@ class Neighbourhoods extends Component {
     const sql = source.getQuery();
     const bboxFilter = new carto.filter.BoundingBoxLeaflet(map);
 
-    this.baseQuery = this.props.layers.neighbourhoods.source.getQuery()
-
     this.dataView = new carto.dataview.Category(new carto.source.SQL(sql), 'neighbourhood', {
       limit: 10,
       operation: carto.operation.COUNT,
@@ -51,20 +50,8 @@ class Neighbourhoods extends Component {
   }
 
   onCategoryClicked = (selected) => {
-    const { source } = this.props.layers.listings;
-    const neighSource = this.props.layers.neighbourhoods.source;
-    const filter = selected.map(category => `'${category}'`).join(',');
-    const originalQuery = this.dataView.getSource()._query;
-
-    this.setState({ selected }, () => {
-      if (selected.length === 0) {
-        source.setQuery(originalQuery)
-        neighSource.setQuery(this.baseQuery)
-      } else {
-        source.setQuery(`${originalQuery} AND neighbourhood IN (${filter})`);
-        neighSource.setQuery(`${this.baseQuery} WHERE neighbourhood IN (${filter})`);
-      }
-    })
+    this.setState({ selected });
+    this.props.setNeighbourhoods(selected);
   }
 
   render() {
@@ -93,4 +80,8 @@ const mapStateToProps = state => ({
   layers: state.layers,
 });
 
-export default connect(mapStateToProps)(Neighbourhoods);
+const mapDispatchToProps = dispatch => ({
+  setNeighbourhoods: selected => dispatch(setNeighbourhoods(selected)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Neighbourhoods);

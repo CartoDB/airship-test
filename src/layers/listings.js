@@ -1,9 +1,9 @@
 export default {
-  name: '🏠 Airbnb Listings',
+  name: 'Airbnb Listings',
 
   visible: true,
 
-  style: `
+  cartocss: `
     #layer {
       marker-width: 7;
       marker-fill-opacity: 1;
@@ -25,7 +25,7 @@ export default {
     }
   `,
 
-  source: `
+  query: `
     SELECT
       *
     FROM

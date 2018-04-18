@@ -22,6 +22,12 @@ export const setBboxFilter = bbox => ({
   bbox,
 });
 
+export const SET_NEIGHBOURHOODS = '@Filters/SET_NEIGHBOURHOODS';
+export const setNeighbourhoods = neighbourhoods => ({
+  type: SET_NEIGHBOURHOODS,
+  neighbourhoods,
+});
+
 export const TOGGLE_LAYER = '@Layers/TOGGLE';
 export const toggleLayer = name => ({
   type: TOGGLE_LAYER,
