@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReviewScores, AveragePrice, RoomType, Neighbourhoods, TypesPerNeighbourhood } from './index';
+import { AveragePrice, RoomType, Neighbourhoods, TypesPerNeighbourhood } from './index';
 
 const Widgets = styled.section`
-  width: 280px;
+  width: 350px;
   max-height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -15,6 +15,5 @@ export default () => (
     <AveragePrice />
     <TypesPerNeighbourhood />
     <Neighbourhoods />
-    <ReviewScores />
   </Widgets>
 );
