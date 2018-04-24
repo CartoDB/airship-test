@@ -65,7 +65,7 @@ class Neighbourhoods extends Component {
         <CategoryWidget
           categories={categories}
           max={max}
-          color="#3AB5F0"
+          color={this.props.hasCustomTheme ? '#56C58C' : '#3AB5F0'}
           onCategoryClick={this.onCategoryClicked}
           selected={selected}
         />
@@ -78,6 +78,7 @@ const mapStateToProps = state => ({
   client: state.client,
   map: state.map,
   layers: state.layers,
+  hasCustomTheme: !!state.theme,
 });
 
 const mapDispatchToProps = dispatch => ({

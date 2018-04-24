@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import L from 'leaflet';
 import carto from 'carto.js';
 import { connect } from 'react-redux';
+import { ThemeProvider } from '@carto/airship';
 import { storeLayers, setMap, setBboxFilter } from './actions';
 import { Widgets, Legend, AirbnbPopup } from './components';
 import layers from './layers';
@@ -57,11 +58,13 @@ class App extends Component {
         layer.on('featureClicked', this.openPopup.bind(this));
       }
 
-      this.props.client.addLayer(layer);
       this.props.client.getLeafletLayer().addTo(this.props.map);
 
       return { ...all, [layerName]: { source, style, layer, ...other } };
     }, {});
+
+    // Add all layers at the same tame so it doesn't reload multiple times
+    this.props.client.addLayers(Object.values(cartoLayers).map(item => item.layer));
 
     // Labels need to be added after the layers
     L.tileLayer(BASEMAP_LABELS).addTo(this.props.map);
@@ -80,18 +83,21 @@ class App extends Component {
   }
 
   render() {
-    const hasLayers = Object.keys(this.props.layers).length > 0;
+    const { theme, layers } = this.props;
+    const hasLayers = Object.keys(layers).length > 0;
 
     return (
-      <main>
-        <div id="map" />
-        {hasLayers && (
-          <React.Fragment>
-            <Legend />
-            <Widgets />
-          </React.Fragment>
-        )}
-      </main>
+      <ThemeProvider theme={theme}>
+        <main>
+          <div id="map" />
+          {hasLayers && (
+            <React.Fragment>
+              <Legend />
+              <Widgets />
+            </React.Fragment>
+          )}
+        </main>
+      </ThemeProvider>
     );
   }
 }
@@ -99,7 +105,8 @@ class App extends Component {
 const mapStateToProps = state => ({
   client: state.client,
   map: state.map,
-  layers: state.layers
+  layers: state.layers,
+  theme: state.theme,
 });
 
 const mapDispatchToProps = dispatch => ({

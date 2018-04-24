@@ -18,8 +18,8 @@
     to-fast-properties "^2.0.0"
 
 "@carto/airship@^1.0.0-alpha.7":
-  version "1.0.0-alpha.14"
-  resolved "https://registry.yarnpkg.com/@carto/airship/-/airship-1.0.0-alpha.14.tgz#db3dc4857b0d2ccf7f70a234e923f4a50ac813a3"
+  version "1.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/@carto/airship/-/airship-1.0.0-alpha.17.tgz#7a05a067aad0fc3bc60e61a485817456da437208"
   dependencies:
     d3-array "^1.2.1"
     d3-axis "^1.0.8"
@@ -2021,8 +2021,8 @@ d3-collection@1:
   resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.4.tgz#342dfd12837c90974f33f1cc0a785aea570dcdc2"
 
 d3-color@1, d3-color@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.3.tgz#bc7643fca8e53a8347e2fbdaffa236796b58509b"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.1.0.tgz#73957299b63ca935bf19c6c9d835e90066028329"
 
 d3-dispatch@1, d3-dispatch@^1.0.3:
   version "1.0.3"

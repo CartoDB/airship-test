@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleLayer } from '../actions';
+import { toggleLayer, toggleTheme } from '../actions';
 import { Legend, Collapsible, Subheader, Toggle, Text } from '@carto/airship';
 
 const CustomLegend = Legend.extend`
@@ -10,7 +10,7 @@ const CustomLegend = Legend.extend`
   left: 16px;
 `;
 
-const LegendContainer = ({ layers, toggleLayer }) => (
+const LegendContainer = ({ layers, toggleLayer, hasCustomTheme, toggleTheme }) => (
   <CustomLegend>
     <Legend.Panel>
       <Collapsible>
@@ -30,16 +30,27 @@ const LegendContainer = ({ layers, toggleLayer }) => (
           ))}
         </Collapsible.Content>
       </Collapsible>
+
+      <Subheader margin="1rem 0 0">Theme selector</Subheader>
+      <Toggle
+        htmlFor="dark-mode"
+        checked={hasCustomTheme}
+        onChange={() => toggleTheme(!hasCustomTheme)}
+      >
+        <Text>Night Mode</Text>
+      </Toggle>
     </Legend.Panel>
   </CustomLegend>
 );
 
 const mapStateToProps = state => ({
   layers: state.layers,
+  hasCustomTheme: !!state.theme,
 });
 
 const mapDispatchToProps = dispatch => ({
   toggleLayer: name => dispatch(toggleLayer(name)),
+  toggleTheme: (active) => dispatch(toggleTheme(active)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LegendContainer);

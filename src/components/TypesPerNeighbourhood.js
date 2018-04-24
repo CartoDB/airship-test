@@ -81,7 +81,7 @@ class TypesPerNeighbourhood extends Component {
         {data.length > 0 && (
           <StackedBar
             data={data}
-            colors={C.COLORS}
+            colors={this.props.hasCustomTheme ? C.COLORS.NIGHT : C.COLORS.DEFAULT}
             keys={['entire_homes', 'private_rooms', 'shared_rooms']}
           />
         )}
@@ -93,6 +93,7 @@ class TypesPerNeighbourhood extends Component {
 const mapStateToProps = state => ({
   layers: state.layers,
   filters: state.filters,
+  hasCustomTheme: !!state.theme,
 });
 
 export default connect(mapStateToProps)(TypesPerNeighbourhood);

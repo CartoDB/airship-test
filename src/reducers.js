@@ -1,7 +1,17 @@
 import carto from 'carto.js';
 import * as actions from './actions';
 import { C } from './constants';
+import { THEME } from './constants'
 
+export const theme = (state = null, action) => {
+  switch (action.type) {
+    case actions.TOGGLE_THEME:
+      return action.active ? THEME : null;
+
+    default:
+      return state;
+  }
+}
 
 const cartoClient = new carto.Client(C.CLIENT);
 export const client = (state = cartoClient, action) => state;
