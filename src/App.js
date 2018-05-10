@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import L from 'leaflet';
-import carto from 'carto.js';
+import carto from '@carto/carto.js';
 import { connect } from 'react-redux';
 import { ThemeProvider } from '@carto/airship';
 import { storeLayers, setMap, setBboxFilter } from './actions';

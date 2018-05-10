@@ -1,4 +1,4 @@
-import carto from 'carto.js';
+import carto from '@carto/carto.js';
 import * as actions from './actions';
 import { C } from './constants';
 import { THEME } from './constants'

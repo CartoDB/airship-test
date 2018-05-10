@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import carto from 'carto.js';
+import carto from '@carto/carto.js';
 import { DonutChart } from '@carto/airship'
 import Widget from './Widget';
 import { C } from '../constants';
