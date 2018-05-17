@@ -8,6 +8,13 @@ const CustomLegend = Legend.extend`
   z-index: 1000;
   top: 16px;
   left: 16px;
+  @media(max-width: 600px){
+    position: relative;
+    height: calc(100vh - 40px);
+    width: 100vw;
+    top: 0px;
+    left: 0px;
+  }
 `;
 
 const LegendContainer = ({ layers, toggleLayer, hasCustomTheme, toggleTheme }) => (

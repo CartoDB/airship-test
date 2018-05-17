@@ -1,16 +1,30 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import L from 'leaflet';
-import carto from 'carto.js';
+import carto from '@carto/carto.js';
 import { connect } from 'react-redux';
 import { ThemeProvider } from '@carto/airship';
+import styled from 'styled-components';
 import { storeLayers, setMap, setBboxFilter } from './actions';
-import { Widgets, Legend, AirbnbPopup } from './components';
+import { Widgets, Legend, AirbnbPopup, MobileTabs } from './components';
 import layers from './layers';
 import { C } from './constants';
 import './index.css';
 
 const { BASEMAP, BASEMAP_LABELS, CENTER, ZOOM } = C.MAP;
+
+const HideMobile = styled.section`
+  @media(max-width: 600px){
+    display: none
+  }
+`;
+
+const ShowOnlyMobile = styled.section`
+  @media(min-width: 601px){
+    display: none
+  }
+`;
+
 
 class App extends Component {
   componentDidMount() {
@@ -92,7 +106,12 @@ class App extends Component {
           <div id="map" />
           {hasLayers && (
             <React.Fragment>
-              <Legend />
+              <ShowOnlyMobile>
+                <MobileTabs />
+              </ShowOnlyMobile>
+              <HideMobile>
+                <Legend />
+              </HideMobile>
               <Widgets />
             </React.Fragment>
           )}
