@@ -36,8 +36,8 @@
     react-emotion "^9.0.1"
 
 "@carto/carto.js@^4.0.3":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@carto/carto.js/-/carto.js-4.0.4.tgz#4f61a5fbba5c87f53ed1bb9d9a8387d8ab869d06"
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/@carto/carto.js/-/carto.js-4.0.6.tgz#9038a7f2a3fc5c9a96badc3badbca1c5e423d9a9"
   dependencies:
     "@carto/zera" "1.0.6"
     backbone "1.2.3"
@@ -1503,9 +1503,9 @@ capture-stack-trace@^1.0.0:
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.0.tgz#4a6fa07399c26bba47f0b2496b4d0fb408c5550d"
 
 carto@cartodb/carto#master, "carto@github:cartodb/carto#master":
-  version "0.15.1-cdb4"
-  uid "664b45cdde978881e5464db02df5c31eb645e370"
-  resolved "https://codeload.github.com/cartodb/carto/tar.gz/664b45cdde978881e5464db02df5c31eb645e370"
+  version "0.15.1"
+  uid "31abb8bee02df605521247b0223d508320f7d4c8"
+  resolved "https://codeload.github.com/cartodb/carto/tar.gz/31abb8bee02df605521247b0223d508320f7d4c8"
   dependencies:
     mapnik-reference "~6.0.2"
     optimist "~0.6.0"
@@ -5601,8 +5601,8 @@ pbkdf2@^3.0.3:
     sha.js "^2.4.8"
 
 "perfect-scrollbar@git://github.com/CartoDB/perfect-scrollbar.git#master":
-  version "0.6.16"
-  resolved "git://github.com/CartoDB/perfect-scrollbar.git#7e39eb3d689f6849f18943cf271fd96fc59dbdc0"
+  version "0.6.17"
+  resolved "git://github.com/CartoDB/perfect-scrollbar.git#f2b66c76ad3718d3c704bd7e1693ea382e44e64d"
 
 performance-now@^0.2.0:
   version "0.2.0"
@@ -7347,8 +7347,8 @@ toposort@^1.0.0:
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.6.tgz#c31748e55d210effc00fdcdc7d6e68d7d7bb9cec"
 
 "torque.js@github:cartodb/torque#master":
-  version "2.16.3"
-  resolved "https://codeload.github.com/cartodb/torque/tar.gz/f4720e0736ed8eb36cbeb75d5960a1c849ade80f"
+  version "2.16.5"
+  resolved "https://codeload.github.com/cartodb/torque/tar.gz/ce414701abb61847d9ddc5830d83c5a3a9d655b2"
   dependencies:
     carto cartodb/carto#master
     d3 "3.5.17"

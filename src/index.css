@@ -25,6 +25,12 @@ main {
   display: flex;
 }
 
+@media(max-width: 600px) {
+  main{
+    flex-direction: column;
+  }
+}
+
 .leaflet-popup-content p {
   margin: 0;
 }
