@@ -1502,9 +1502,8 @@ capture-stack-trace@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.0.tgz#4a6fa07399c26bba47f0b2496b4d0fb408c5550d"
 
-carto@cartodb/carto#master, "carto@github:cartodb/carto#master":
+carto@cartodb/carto#master:
   version "0.15.1"
-  uid "31abb8bee02df605521247b0223d508320f7d4c8"
   resolved "https://codeload.github.com/cartodb/carto/tar.gz/31abb8bee02df605521247b0223d508320f7d4c8"
   dependencies:
     mapnik-reference "~6.0.2"
@@ -7346,9 +7345,9 @@ toposort@^1.0.0:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.6.tgz#c31748e55d210effc00fdcdc7d6e68d7d7bb9cec"
 
-"torque.js@github:cartodb/torque#master":
+torque.js@CartoDB/torque#master:
   version "2.16.5"
-  resolved "https://codeload.github.com/cartodb/torque/tar.gz/ce414701abb61847d9ddc5830d83c5a3a9d655b2"
+  resolved "https://codeload.github.com/CartoDB/torque/tar.gz/ce414701abb61847d9ddc5830d83c5a3a9d655b2"
   dependencies:
     carto cartodb/carto#master
     d3 "3.5.17"
