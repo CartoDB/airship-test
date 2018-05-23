@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Tabs } from '@carto/airship';
 import { Legend } from '.';
@@ -13,11 +12,10 @@ const TabsContainer = styled.section`
     background-color: #ffffff;
 `;
 
-const MobileTabs = ({ }) => (
+const MobileTabs = () => (
     <TabsContainer>
         <Tabs large>
             <Tabs.Panel label="Map"/>
-            {/* </Tabs.Panel> */}
             <Tabs.Panel label="Selector">
                 <Legend/>
             </Tabs.Panel>
@@ -25,12 +23,6 @@ const MobileTabs = ({ }) => (
     </TabsContainer>
 );
 
-const mapStateToProps = state => ({
-});
-
-const mapDispatchToProps = dispatch => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MobileTabs);
+export default MobileTabs;
 
 
